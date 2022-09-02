@@ -26,6 +26,6 @@ exports.registerEmailParams = (email, token) => {
                 }
             }
         }; 
-    }        
+    };       
     
     
