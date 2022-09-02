@@ -86,7 +86,7 @@ const Register = () => {
             {registerForm()}
             {/* {JSON.stringify(state)}  This will show our state values in real time as they are updated */}
         </div>
-        yellow
+        yellow chicken
         {success && showSuccessMessage(success)}
         {error && showErrorMessage(error)}
     </Layout>
