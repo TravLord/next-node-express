@@ -1,0 +1,24 @@
+#nprogress .bar {
+    height:4px !important;
+    background: rgb(115, 255, 0) !important;
+}
+
+.nav a:hover {
+    border-radius: 0px;
+}
+
+/*overridding package styling for customization*/
+#nprogress .spinner-icon {
+    color:rgb(115, 255, 0) !important ;
+    border: solid 4px transparent !important;
+    border-top-color:rgb(115, 255, 0) !important;
+    border-left-color: rgb(115, 255, 0) !important;
+}
+#nprogress .spinner-icon {
+    margin-top: 50px;
+    width: 80px !important;
+    height: 80px !important;
+    box-sizing: border-box;
+    -webkit-animation: nprogress-spinner 550ms linear infinite !important;
+    animation: nprogress-spinner 550ms linear infinite !important;
+}

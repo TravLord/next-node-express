@@ -1,0 +1,2 @@
+export const showSuccessMessage = success => <div className="alert alert-success text-center mx-auto w-75 rounded-0 mb-1">{success}</div>;
+export const showErrorMessage = error => <div className="alert alert-danger text-center mx-auto w-75 rounded-0 mb-1">{error}</div>;
