@@ -14,7 +14,7 @@ mongoose
 .then(() => console.log("DB connected"))
 .catch((err) => console.log("DB Error => ",err));
 
-// import routes/auth.js & apply as middlewared
+// import routes/auth.js & apply as middleware this way we can have many references and seperate modularize our logic
 const authRoutes = require('./routes/auth')
 
 // app middlewares
@@ -31,4 +31,4 @@ app.use('/api', authRoutes);
 //define port where app will run dynamic url or 8000 and listen
 const port = process.env.PORT || 8000 
 
-app.listen(port, ()=> console.log(`Api is running on port ${port}`));
+app.listen(port, () => console.log(`Api is running on port ${port}`));

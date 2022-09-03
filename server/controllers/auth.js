@@ -32,11 +32,10 @@ const { registerEmailParams } = require('../helpers/email');
             expiresIn:'10m'
         });
     
-       // send email (ref)
-       const params = registerEmailParams(email,token);
-
-            //promise gives us access to then() promise chaining
-            const sendEmailOnRegister = ses.sendEmail(params).promise();
+       // send email ( func ref email.js helper function)
+       // promise in case we can't verify the email upon request 
+        const params = registerEmailParams(email,token);
+        const sendEmailOnRegister = ses.sendEmail(params).promise();
 
             sendEmailOnRegister
             .then(data => {
@@ -51,4 +50,19 @@ const { registerEmailParams } = require('../helpers/email');
             })
         });          
     });
+};
+
+// 
+exports.registerActivate = (req,res) => {
+    const {token} = req.body;
+    // console.log(token)// 1ST ARG TOKEN, 2ND SECRET KEY USED FOR HASHING, 3rd is result for verify jwt func
+    // if token is recived after 10 min expiration date an error will be thrown.
+    jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION, function(err,decoded){
+        if(err)
+        {
+            return res.status(401).json({
+                error: ' Expired registration Link, try again...'
+            })
+        }
+    })
 };
