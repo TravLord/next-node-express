@@ -15,7 +15,6 @@ const ActivateAccount = ({router}) => {
         buttonText: 'Activate Account',
         success:'',
         error:''
-    
     });
     
     const {name, token, buttonText, success, error} = state;
@@ -50,7 +49,7 @@ const ActivateAccount = ({router}) => {
     return (
     <Layout>
         <div className="col-md-6 offset-md-3">
-            <h1>Good day {name}, you son of a bitch are ready to activate your account?</h1>
+            {buttonText ==='Activated' ? <h1>Registration page</h1> : <h1>Good day {name}, you son of a bitch are ready to activate your account?</h1>}
             <br/>
             {success && showSuccessMessage}
             {error && showErrorMessage}

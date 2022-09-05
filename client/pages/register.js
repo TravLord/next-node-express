@@ -100,21 +100,16 @@ const Register = () => {
         
     </form>
     
-  return (
-    <Layout>
-        
-
-        <div> 
-            <h1 className="mb-4 pb-1 border-warning border-bottom border-top w-25 text-center rounded-2">Register</h1>
-            {success && showSuccessMessage(success)}
-        {error && showErrorMessage(error)}
-            {registerForm()}
-            {/* {JSON.stringify(state)}  This will show our state values in real time as they are updated */}
-        </div>
-        
-        
-    </Layout>
-  );
+  return ( <Layout>       
+                <div> 
+                    <h1 className="mb-4 pb-1 border-warning border-bottom border-top w-25 text-center rounded-2">Register</h1>
+                    {success && showSuccessMessage(success)}
+                {error && showErrorMessage(error)}
+                    {registerForm()}
+                    {/* {JSON.stringify(state)}  This will show our state values in real time as they are updated */}
+                </div>    
+            </Layout>
+        );
 };
 
 export default Register;
