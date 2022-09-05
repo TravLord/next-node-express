@@ -2,6 +2,8 @@ const User = require('../models/user')
 const AWS = require('aws-sdk')
 const jwt = require('jsonwebtoken');
 const { registerEmailParams } = require('../helpers/email');
+const shortId = require('shortid');
+
 
     AWS.config.update({
         accessKeyId: process.env.AWS_KEY_ID,
@@ -9,15 +11,15 @@ const { registerEmailParams } = require('../helpers/email');
         region: process.env.AWS_REGION
     });
 
-    //new instance
+    //new instance of aws email service for our auto registration email
     const ses = new AWS.SES({ apiVersion: '2010-12-01' });
 
     // exporting result of register function to routes
-    exports.register = (req,res) => {
-        // auto email to registar , destructure request
-        const {name, email, password} = req.body;
-        //check if user already exists using User model schema export (utilize mongoose methods
-        //exec method requires arg function taking in user or error if not found)
+    // auto email to registar , destructure request
+    // check if user already exists using User model schema export (utilize mongoose methods
+    // exec method requires arg function taking in user or error if not found) use object destructuring to find email from user Schema
+    exports.register = (req,res) => {        
+        const {name, email, password} = req.body;      
         User.findOne({email}).exec((err, user) => {
         if(user) {
             console.log(err)
@@ -25,7 +27,6 @@ const { registerEmailParams } = require('../helpers/email');
                 error: 'Email is taken'
             });
         }
-
         // generate signed token with user name email and pw, 
         // grab token from front end and give to user after confirmation link clicked
         const token = jwt.sign({name,email,password}, process.env.JWT_ACCOUNT_ACTIVATION, {
@@ -52,17 +53,47 @@ const { registerEmailParams } = require('../helpers/email');
     });
 };
 
-// 
+// activate registration > check for valid token
 exports.registerActivate = (req,res) => {
     const {token} = req.body;
     // console.log(token)// 1ST ARG TOKEN, 2ND SECRET KEY USED FOR HASHING, 3rd is result for verify jwt func
-    // if token is recived after 10 min expiration date an error will be thrown.
+    // if token is recived after 10 min expiration date an error will be thrown as its not verified
     jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION, function(err,decoded){
-        if(err)
+        if (err)
         {
             return res.status(401).json({
-                error: ' Expired registration Link, try again...'
+                error: ' Expired registration Link, you must register again...  Refer to the registration page'
             })
         }
+
+        // make sure user email is unique decode token for user info access to name, email and password
+        // using sortId package for custom auto id generation, finOne
+        const {name, email, password} = jwt.decode(token)
+        const username = shortId.generate()
+
+        User.findOne({email}).exec((err,user) => {
+            if(user)
+            {
+               return res.status(401).json({
+                error: 'email is taken'
+               })
+            }
+
+            // save and register new user
+
+            const user = new User({username, name, email, password})
+            user.save((err,user) => {
+                if(err) {
+                    return res.status(401).json({
+                        error: 'Error saving user in database, please try again...'
+                       })
+
+                }
+                return res.json({
+                    message:'Registration success!  Please login...'
+                })
+            })
+
+        })
     })
 };
